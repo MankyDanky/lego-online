@@ -1,58 +1,32 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Canvas, type ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, Sky, Stars } from '@react-three/drei';
 import { useGameStore } from '../store/gameStore';
 import { Brick } from './Brick';
 import { Ground } from './Ground';
-import { calculateBrickPosition, checkCollision } from '../utils/grid';
 
 const SceneContent: React.FC = () => {
   const bricks = useGameStore((state) => state.bricks);
-  const addBrick = useGameStore((state) => state.addBrick);
-  const removeBrick = useGameStore((state) => state.removeBrick);
-  const selectedColor = useGameStore((state) => state.selectedColor);
+  const selectedBrickId = useGameStore((state) => state.selectedBrickId);
+  const currentTool = useGameStore((state) => state.currentTool);
+  const selectBrick = useGameStore((state) => state.selectBrick);
+  const updateBrick = useGameStore((state) => state.updateBrick);
   
-  const [previewPos, setPreviewPos] = useState<[number, number, number] | null>(null);
-  const [isPlacementValid, setIsPlacementValid] = useState(true);
-
-  const handlePointerMove = (e: ThreeEvent<MouseEvent>) => {
-    e.stopPropagation();
-    const pos = calculateBrickPosition(e);
-    if (pos) {
-      const collision = checkCollision(pos, bricks);
-      setIsPlacementValid(!collision);
-      setPreviewPos(pos);
-    } else {
-      setPreviewPos(null);
-    }
-  };
-
-  const handlePointerOut = () => {
-    setPreviewPos(null);
-  };
-
-  const handleClick = (e: ThreeEvent<MouseEvent>) => {
-    e.stopPropagation();
-    if (e.altKey) return;
-
-    const pos = calculateBrickPosition(e);
-    if (pos && !checkCollision(pos, bricks)) {
-      addBrick(pos);
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const orbitRef = useRef<any>(null);
 
   const handleBrickClick = (e: ThreeEvent<MouseEvent>, id: string) => {
     e.stopPropagation();
-    if (e.altKey) {
-      removeBrick(id);
-      setPreviewPos(null);
-      return;
-    }
-    
-    const pos = calculateBrickPosition(e);
-    if (pos && !checkCollision(pos, bricks)) {
-      addBrick(pos);
-    }
+    selectBrick(id);
+  };
+
+  const handleGroundClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    selectBrick(null);
+  };
+
+  const handleTransformChange = (id: string, position: [number, number, number], rotation: [number, number, number]) => {
+    updateBrick(id, { position, rotation });
   };
 
   return (
@@ -62,33 +36,30 @@ const SceneContent: React.FC = () => {
       <Sky sunPosition={[100, 20, 100]} />
       <Stars />
       
-      <Ground 
-        onPointerMove={handlePointerMove} 
-        onPointerOut={handlePointerOut}
-        onClick={handleClick}
-      />
+      <Ground onClick={handleGroundClick} />
       
       {bricks.map((brick) => (
         <Brick
           key={brick.id}
+          id={brick.id}
+          type={brick.type}
           position={brick.position}
+          rotation={brick.rotation}
           color={brick.color}
+          selected={selectedBrickId === brick.id}
+          tool={currentTool}
           onClick={(e) => handleBrickClick(e, brick.id)}
-          onPointerMove={handlePointerMove}
-          onPointerOut={handlePointerOut}
+          onTransformChange={handleTransformChange}
+          onDraggingChange={(isDragging) => {
+            if (orbitRef.current) {
+              orbitRef.current.enabled = !isDragging;
+            }
+          }}
         />
       ))}
-
-      {previewPos && (
-        <Brick
-          position={previewPos}
-          color={isPlacementValid ? selectedColor : '#ff0000'}
-          transparent
-          opacity={0.5}
-        />
-      )}
       
-      <OrbitControls makeDefault />
+      <gridHelper args={[100, 100]} position={[0, 0.01, 0]} />
+      <OrbitControls ref={orbitRef} makeDefault />
     </>
   );
 };
