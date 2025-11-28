@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
+import { checkCollision } from '../utils/grid';
 
 export type BrickData = {
   id: string;
@@ -21,14 +22,9 @@ export const useGameStore = create<GameState>((set) => ({
   selectedColor: '#cc0000', // Default Lego Red
   addBrick: (position) =>
     set((state) => {
-      // Simple collision check
-      const exists = state.bricks.some(
-        (b) =>
-          Math.abs(b.position[0] - position[0]) < 0.1 &&
-          Math.abs(b.position[1] - position[1]) < 0.1 &&
-          Math.abs(b.position[2] - position[2]) < 0.1
-      );
-      if (exists) return state;
+      if (checkCollision(position, state.bricks)) {
+        return state;
+      }
       
       return {
         bricks: [
