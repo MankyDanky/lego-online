@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { type ThreeEvent } from '@react-three/fiber';
 import { Edges, TransformControls } from '@react-three/drei';
 import { Group } from 'three';
@@ -42,12 +42,12 @@ export const Brick: React.FC<BrickProps> = ({
   onDraggingChange
 }) => {
   const [hovered, setHover] = React.useState(false);
+  const [group, setGroup] = React.useState<Group | null>(null);
   const { width, depth } = BRICK_DIMENSIONS[type];
-  const groupRef = useRef<Group>(null);
 
   const handleTransformChange = () => {
-    if (groupRef.current && onTransformChange) {
-      const { position, rotation } = groupRef.current;
+    if (group && onTransformChange) {
+      const { position, rotation } = group;
       onTransformChange(
         id,
         [position.x, position.y, position.z],
@@ -56,64 +56,67 @@ export const Brick: React.FC<BrickProps> = ({
     }
   };
 
-  const BrickContent = (
-    <group 
-      ref={groupRef} 
-      position={position} 
-      rotation={rotation}
-      onClick={onClick}
-      onContextMenu={onContextMenu}
-      onPointerOver={(e) => { e.stopPropagation(); setHover(true); }}
-      onPointerOut={(e) => { 
-        e.stopPropagation(); 
-        setHover(false); 
-      }}
-    >
-      {/* Main Body */}
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[width, BRICK_HEIGHT, depth]} />
-        <meshStandardMaterial 
-          color={color} 
-          emissive={selected ? '#444444' : (hovered ? '#222222' : 'black')}
-          emissiveIntensity={selected || hovered ? 0.5 : 0}
-        />
-        <Edges color="black" threshold={15} opacity={0.2} transparent />
-      </mesh>
-
-      {/* Studs */}
-      {Array.from({ length: width }).map((_, x) =>
-        Array.from({ length: depth }).map((_, z) => (
-          <mesh
-            key={`${x}-${z}`}
-            position={[
-              x * 1 - (width / 2) + 0.5,
-              BRICK_HEIGHT / 2 + 0.1,
-              z * 1 - (depth / 2) + 0.5
-            ]}
-            castShadow
-          >
-            <cylinderGeometry args={[0.35, 0.35, 0.2, 16]} />
-            <meshStandardMaterial color={color} />
-          </mesh>
-        ))
-      )}
-    </group>
-  );
-
-  if (selected) {
-    return (
-      <TransformControls
-        mode={tool === 'move' ? 'translate' : 'rotate'}
-        onMouseUp={handleTransformChange}
-        onDragging-changed={(e: { value: boolean }) => onDraggingChange?.(e.value)}
+  return (
+    <>
+      <group 
+        ref={setGroup} 
+        position={position} 
+        rotation={rotation}
+        onClick={onClick}
+        onContextMenu={onContextMenu}
+        onPointerOver={(e) => { e.stopPropagation(); setHover(true); }}
+        onPointerOut={(e) => { 
+          e.stopPropagation(); 
+          setHover(false); 
+        }}
       >
-        {BrickContent}
-      </TransformControls>
-    );
-  }
+        {/* Main Body */}
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[width, BRICK_HEIGHT, depth]} />
+          <meshStandardMaterial 
+            color={color} 
+            emissive={selected ? '#444444' : (hovered ? '#222222' : 'black')}
+            emissiveIntensity={selected || hovered ? 0.5 : 0}
+          />
+          <Edges color="black" threshold={15} opacity={0.2} transparent />
+        </mesh>
 
-  return BrickContent;
+        {/* Studs */}
+        {Array.from({ length: width }).map((_, x) =>
+          Array.from({ length: depth }).map((_, z) => (
+            <mesh
+              key={`${x}-${z}`}
+              position={[
+                x * 1 - (width / 2) + 0.5,
+                BRICK_HEIGHT / 2 + 0.1,
+                z * 1 - (depth / 2) + 0.5
+              ]}
+              castShadow
+            >
+              <cylinderGeometry args={[0.35, 0.35, 0.2, 16]} />
+              <meshStandardMaterial color={color} />
+            </mesh>
+          ))
+        )}
+      </group>
+
+      {selected && group && (
+        <TransformControls
+          object={group}
+          mode={tool === 'move' ? 'translate' : 'rotate'}
+          onMouseDown={() => onDraggingChange?.(true)}
+          onMouseUp={() => {
+            onDraggingChange?.(false);
+            handleTransformChange();
+          }}
+          translationSnap={null}
+          rotationSnap={null}
+        />
+      )}
+    </>
+  );
 };
+
 
 
 
