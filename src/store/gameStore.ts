@@ -3,6 +3,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type BrickType = '2x2' | '2x4' | '1x2' | '1x4' | '1x1';
 
+export const BRICK_DIMENSIONS: Record<BrickType, { width: number; depth: number }> = {
+  '1x1': { width: 1, depth: 1 },
+  '1x2': { width: 1, depth: 2 },
+  '1x4': { width: 1, depth: 4 },
+  '2x2': { width: 2, depth: 2 },
+  '2x4': { width: 2, depth: 4 },
+};
+
+export const BRICK_HEIGHT = 1.2;
+
 export type BrickData = {
   id: string;
   type: BrickType;
