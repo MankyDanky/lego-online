@@ -46,6 +46,30 @@ export const UI: React.FC = () => {
     reader.readAsText(file);
   };
 
+  const containerStyle: React.CSSProperties = {
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(4px)',
+    padding: '12px',
+    borderRadius: '12px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    display: 'flex',
+    gap: '8px',
+    pointerEvents: 'auto',
+  };
+
+  const buttonStyle: React.CSSProperties = {
+    padding: '8px 16px',
+    borderRadius: '8px',
+    border: 'none',
+    cursor: 'pointer',
+    fontWeight: 600,
+    fontSize: '14px',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
   return (
     <div style={{
       position: 'absolute',
@@ -57,34 +81,24 @@ export const UI: React.FC = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      padding: '20px',
-      boxSizing: 'border-box'
+      padding: '24px',
+      boxSizing: 'border-box',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
     }}>
       {/* Top Bar: Tools & Actions */}
       <div style={{
-        pointerEvents: 'auto',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        pointerEvents: 'none', // Container shouldn't block clicks
       }}>
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.9)',
-          padding: '10px',
-          borderRadius: '8px',
-          display: 'flex',
-          gap: '10px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
+        <div style={containerStyle}>
           <button
             onClick={() => setTool('move')}
             style={{
-              padding: '8px 16px',
-              background: currentTool === 'move' ? '#0055bf' : '#eee',
-              color: currentTool === 'move' ? 'white' : 'black',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
+              ...buttonStyle,
+              background: currentTool === 'move' ? '#2563eb' : '#f3f4f6',
+              color: currentTool === 'move' ? 'white' : '#4b5563',
             }}
           >
             Move
@@ -92,13 +106,9 @@ export const UI: React.FC = () => {
           <button
             onClick={() => setTool('rotate')}
             style={{
-              padding: '8px 16px',
-              background: currentTool === 'rotate' ? '#0055bf' : '#eee',
-              color: currentTool === 'rotate' ? 'white' : 'black',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
+              ...buttonStyle,
+              background: currentTool === 'rotate' ? '#2563eb' : '#f3f4f6',
+              color: currentTool === 'rotate' ? 'white' : '#4b5563',
             }}
           >
             Rotate
@@ -106,52 +116,50 @@ export const UI: React.FC = () => {
           <button
             onClick={() => setTool('delete')}
             style={{
-              padding: '8px 16px',
-              background: currentTool === 'delete' ? '#0055bf' : '#eee',
-              color: currentTool === 'delete' ? 'white' : 'black',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
+              ...buttonStyle,
+              background: currentTool === 'delete' ? '#ef4444' : '#f3f4f6',
+              color: currentTool === 'delete' ? 'white' : '#4b5563',
             }}
           >
             Delete
           </button>
         </div>
 
-        <button
-          onClick={reset}
-          style={{
-            pointerEvents: 'auto',
-            padding: '8px 16px',
-            background: '#ff4444',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-          }}
-        >
-          Clear All
-        </button>
+        <div style={{ pointerEvents: 'auto' }}>
+          <button
+            onClick={reset}
+            style={{
+              ...buttonStyle,
+              background: '#ef4444',
+              color: 'white',
+              boxShadow: '0 4px 6px -1px rgba(239, 68, 68, 0.3)',
+            }}
+          >
+            Clear All
+          </button>
+        </div>
       </div>
 
       {/* Bottom Left: Color Picker */}
       <div style={{
-        pointerEvents: 'auto',
+        ...containerStyle,
         position: 'absolute',
-        bottom: '20px',
-        left: '20px',
-        background: 'rgba(255, 255, 255, 0.9)',
-        padding: '10px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        display: 'flex',
+        bottom: '24px',
+        left: '24px',
         flexDirection: 'column',
-        gap: '5px'
+        gap: '8px',
+        minWidth: '60px',
+        alignItems: 'center'
       }}>
-        <span style={{ fontWeight: 'bold', fontSize: '12px', color: '#333' }}>Color</span>
+        <span style={{ 
+          fontWeight: 700, 
+          fontSize: '11px', 
+          color: '#6b7280',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
+        }}>
+          Color
+        </span>
         <input
           type="color"
           value={selectedColor}
@@ -161,50 +169,35 @@ export const UI: React.FC = () => {
             height: '40px',
             padding: '0',
             border: 'none',
-            borderRadius: '4px',
             cursor: 'pointer',
-            background: 'none'
+            background: 'none',
           }}
         />
       </div>
 
       {/* Bottom Right: Save/Load */}
       <div style={{
-        pointerEvents: 'auto',
+        ...containerStyle,
         position: 'absolute',
-        bottom: '20px',
-        right: '20px',
-        background: 'rgba(255, 255, 255, 0.9)',
-        padding: '10px',
-        borderRadius: '8px',
-        display: 'flex',
-        gap: '10px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        bottom: '24px',
+        right: '24px',
       }}>
         <button
           onClick={handleSave}
           style={{
-            padding: '8px 16px',
-            background: '#4CAF50',
+            ...buttonStyle,
+            background: '#10b981',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold'
           }}
         >
           Save
         </button>
         <label
           style={{
-            padding: '8px 16px',
-            background: '#2196F3',
+            ...buttonStyle,
+            background: '#3b82f6',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
             cursor: 'pointer',
-            fontWeight: 'bold',
-            display: 'inline-block'
           }}
         >
           Load
@@ -219,30 +212,23 @@ export const UI: React.FC = () => {
 
       {/* Bottom Center: Brick Selection */}
       <div style={{
-        pointerEvents: 'auto',
+        ...containerStyle,
         position: 'absolute',
-        bottom: '20px',
+        bottom: '24px',
         left: '50%',
         transform: 'translateX(-50%)',
-        background: 'rgba(255, 255, 255, 0.9)',
-        padding: '15px',
-        borderRadius: '10px',
-        display: 'flex',
-        gap: '10px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        padding: '16px',
       }}>
         {BRICK_TYPES.map((type) => (
           <button
             key={type}
             onClick={() => addBrick(type)}
             style={{
-              padding: '10px 20px',
-              background: '#eee',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              minWidth: '60px'
+              ...buttonStyle,
+              background: '#f3f4f6',
+              color: '#374151',
+              border: '1px solid #e5e7eb',
+              minWidth: '60px',
             }}
           >
             {type}
