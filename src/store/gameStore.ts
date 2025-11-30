@@ -53,13 +53,44 @@ export const useGameStore = create<GameState>((set) => ({
       const x = width % 2 !== 0 ? 0.5 : 0;
       const z = depth % 2 !== 0 ? 0.5 : 0;
       
+      // Calculate spawn height based on collisions
+      let maxY = 0;
+      const margin = 0.05;
+      const minX = x - width / 2 + margin;
+      const maxX = x + width / 2 - margin;
+      const minZ = z - depth / 2 + margin;
+      const maxZ = z + depth / 2 - margin;
+
+      state.bricks.forEach((other) => {
+        const { width: ow, depth: od } = BRICK_DIMENSIONS[other.type];
+        const oRotY = Math.round((other.rotation[1] / (Math.PI / 2))) % 2;
+        const oIsRotated = Math.abs(oRotY) === 1;
+        const oEffWidth = oIsRotated ? od : ow;
+        const oEffDepth = oIsRotated ? ow : od;
+
+        const oMinX = other.position[0] - oEffWidth / 2;
+        const oMaxX = other.position[0] + oEffWidth / 2;
+        const oMinZ = other.position[2] - oEffDepth / 2;
+        const oMaxZ = other.position[2] + oEffDepth / 2;
+
+        // AABB Collision Check
+        if (minX < oMaxX && maxX > oMinX && minZ < oMaxZ && maxZ > oMinZ) {
+          const topY = other.position[1] + BRICK_HEIGHT / 2;
+          if (topY > maxY) {
+            maxY = topY;
+          }
+        }
+      });
+
+      const spawnY = maxY + BRICK_HEIGHT / 2;
+
       return {
         bricks: [
           ...state.bricks,
           { 
             id: newId, 
             type, 
-            position: [x, 0.6, z], // Default spawn height
+            position: [x, spawnY, z], 
             rotation: [0, 0, 0],
             color: state.selectedColor 
           },
