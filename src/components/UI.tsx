@@ -136,23 +136,44 @@ export const UI: React.FC = () => {
         <div style={{ height: '1px', background: '#ddd' }} />
 
         {/* Colors */}
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {COLORS.map((color) => (
-            <div
-              key={color}
-              onClick={() => setColor(color)}
+        <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontWeight: 'bold', color: '#333' }}>Color:</span>
+            <input
+              type="color"
+              value={selectedColor}
+              onChange={(e) => setColor(e.target.value)}
               style={{
-                width: '32px',
-                height: '32px',
-                backgroundColor: color,
-                borderRadius: '50%',
+                width: '50px',
+                height: '40px',
+                padding: '0',
+                border: 'none',
+                borderRadius: '4px',
                 cursor: 'pointer',
-                border: selectedColor === color ? '3px solid #333' : '2px solid transparent',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                transition: 'transform 0.1s'
+                background: 'none'
               }}
             />
-          ))}
+          </div>
+          
+          {/* Quick Colors */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {COLORS.map((color) => (
+              <div
+                key={color}
+                onClick={() => setColor(color)}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  backgroundColor: color,
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  border: selectedColor === color ? '3px solid #333' : '2px solid transparent',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                  transition: 'transform 0.1s'
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

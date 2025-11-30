@@ -61,7 +61,7 @@ const SceneContent: React.FC = () => {
 
       // AABB Collision Check
       if (minX < oMaxX && maxX > oMinX && minZ < oMaxZ && maxZ > oMinZ) {
-        const topY = other.position[1] + BRICK_HEIGHT;
+        const topY = other.position[1] + BRICK_HEIGHT / 2;
         if (topY > maxY) {
           maxY = topY;
         }
