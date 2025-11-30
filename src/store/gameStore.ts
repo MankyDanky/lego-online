@@ -36,6 +36,7 @@ interface GameState {
   setTool: (tool: ToolType) => void;
   setColor: (color: string) => void;
   reset: () => void;
+  loadGame: (bricks: BrickData[]) => void;
 }
 
 export const useGameStore = create<GameState>((set) => ({
@@ -88,4 +89,6 @@ export const useGameStore = create<GameState>((set) => ({
   setColor: (color) => set({ selectedColor: color }),
   
   reset: () => set({ bricks: [], selectedBrickId: null }),
+
+  loadGame: (bricks) => set({ bricks, selectedBrickId: null }),
 }));
