@@ -91,7 +91,7 @@ export const Brick: React.FC<BrickProps> = ({
           showY={tool === 'rotate'}
           showX={tool === 'move'}
           showZ={tool === 'move'}
-          translationSnap={1}
+          translationSnap={null}
           rotationSnap={Math.PI / 2}
           onMouseDown={() => onDraggingChange?.(true)}
           onMouseUp={() => {
@@ -105,15 +105,39 @@ export const Brick: React.FC<BrickProps> = ({
             }
           }}
           onObjectChange={() => {
-            if (tool === 'move' && getStackHeight && group) {
-              const newY = getStackHeight(
-                id,
-                type,
-                [group.rotation.x, group.rotation.y, group.rotation.z],
-                group.position.x,
-                group.position.z
-              );
-              group.position.setY(newY);
+            if (tool === 'move' && group) {
+              const { width, depth } = BRICK_DIMENSIONS[type];
+              const rotation = [group.rotation.x, group.rotation.y, group.rotation.z];
+              
+              // Determine effective dimensions based on rotation
+              const rotY = Math.round((rotation[1] / (Math.PI / 2))) % 2;
+              const isRotated = Math.abs(rotY) === 1;
+              
+              const effectiveWidth = isRotated ? depth : width;
+              const effectiveDepth = isRotated ? width : depth;
+
+              // Snap X and Z
+              const snapX = effectiveWidth % 2 !== 0 
+                ? Math.round(group.position.x - 0.5) + 0.5 
+                : Math.round(group.position.x);
+
+              const snapZ = effectiveDepth % 2 !== 0 
+                ? Math.round(group.position.z - 0.5) + 0.5 
+                : Math.round(group.position.z);
+
+              group.position.setX(snapX);
+              group.position.setZ(snapZ);
+
+              if (getStackHeight) {
+                const newY = getStackHeight(
+                  id,
+                  type,
+                  rotation as [number, number, number],
+                  snapX,
+                  snapZ
+                );
+                group.position.setY(newY);
+              }
             }
           }}
         />
