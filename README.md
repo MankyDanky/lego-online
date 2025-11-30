@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# Lego Online
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A 3D brick building application built with React, Three.js, and TypeScript.
 
-Currently, two official plugins are available:
+## Previews
+![Heart in Lego](/previews/heart.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **3D Building Environment**: Place and manipulate bricks in a 3D space.
+- **Brick Variety**: Support for multiple brick sizes including 1x1, 1x2, 1x3, 1x4, 1x6, 1x8, 2x2, 2x3, 2x4, 2x6, and 2x8.
+- **Tools**:
+  - **Move**: Position bricks precisely on the grid.
+  - **Rotate**: Rotate bricks 90 degrees.
+  - **Delete**: Remove unwanted bricks.
+- **Smart Stacking**: Bricks automatically snap to the grid and stack on top of each other.
+- **Color Customization**: Choose any color for your bricks using the color picker.
+- **Save & Load**: Save your creations to a JSON file and load them back later to continue building.
+- **Orbit Controls**: Rotate, zoom (limited), and pan around your creation.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **Framework**: [React](https://reactjs.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **3D Library**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) (Three.js)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **UI Styling**: Inline styles with a glassmorphism aesthetic.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js (v14 or higher)
+- npm or yarn
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Installation
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MankyDanky/lego-online.git
+   cd lego-online
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173`.
+
+## Controls
+
+- **Left Click**: Select a brick or place a new brick (if one is selected/spawned).
+- **Right Click / Drag**: Rotate the camera.
+- **Scroll**: Zoom in/out (clamped to keep you in the scene).
+- **UI Controls**:
+  - Select a brick type from the bottom bar to spawn it.
+  - Use the top-left tools to Move, Rotate, or Delete bricks.
+  - Change the color using the bottom-left color picker.
+  - Save or Load your project using the bottom-right buttons.
+
+## License
+
+MIT
