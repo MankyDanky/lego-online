@@ -69,6 +69,20 @@ export const UI: React.FC = () => {
           >
             Rotate
           </button>
+          <button
+            onClick={() => setTool('delete')}
+            style={{
+              padding: '8px 16px',
+              background: currentTool === 'delete' ? '#0055bf' : '#eee',
+              color: currentTool === 'delete' ? 'white' : 'black',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Delete
+          </button>
         </div>
 
         <button

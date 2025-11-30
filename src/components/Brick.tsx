@@ -59,8 +59,16 @@ export const Brick: React.FC<BrickProps> = ({
           <boxGeometry args={[width, BRICK_HEIGHT, depth]} />
           <meshStandardMaterial 
             color={color} 
-            emissive={selected ? '#444444' : (hovered ? '#222222' : 'black')}
-            emissiveIntensity={selected || hovered ? 0.5 : 0}
+            emissive={
+              tool === 'delete' && hovered 
+                ? '#ff0000' 
+                : selected 
+                  ? '#444444' 
+                  : hovered 
+                    ? '#222222' 
+                    : 'black'
+            }
+            emissiveIntensity={tool === 'delete' && hovered ? 0.5 : (selected || hovered ? 0.5 : 0)}
           />
           <Edges color="black" threshold={15} opacity={0.2} transparent />
         </mesh>

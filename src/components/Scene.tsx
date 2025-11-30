@@ -11,13 +11,18 @@ const SceneContent: React.FC = () => {
   const currentTool = useGameStore((state) => state.currentTool);
   const selectBrick = useGameStore((state) => state.selectBrick);
   const updateBrick = useGameStore((state) => state.updateBrick);
+  const removeBrick = useGameStore((state) => state.removeBrick);
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const orbitRef = useRef<any>(null);
 
   const handleBrickClick = (e: ThreeEvent<MouseEvent>, id: string) => {
     e.stopPropagation();
-    selectBrick(id);
+    if (currentTool === 'delete') {
+      removeBrick(id);
+    } else {
+      selectBrick(id);
+    }
   };
 
   const handleGroundClick = (e: ThreeEvent<MouseEvent>) => {

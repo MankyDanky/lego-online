@@ -21,7 +21,7 @@ export type BrickData = {
   color: string;
 };
 
-export type ToolType = 'move' | 'rotate';
+export type ToolType = 'move' | 'rotate' | 'delete';
 
 interface GameState {
   bricks: BrickData[];
