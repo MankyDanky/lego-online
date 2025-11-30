@@ -70,6 +70,17 @@ export const UI: React.FC = () => {
     justifyContent: 'center',
   };
 
+  const titleStyle: React.CSSProperties = {
+    fontWeight: 700,
+    fontSize: '11px',
+    color: '#6b7280',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    marginBottom: '4px',
+    textAlign: 'center',
+    width: '100%',
+  };
+
   return (
     <div style={{
       position: 'absolute',
@@ -92,37 +103,44 @@ export const UI: React.FC = () => {
         alignItems: 'flex-start',
         pointerEvents: 'none', // Container shouldn't block clicks
       }}>
-        <div style={containerStyle}>
-          <button
-            onClick={() => setTool('move')}
-            style={{
-              ...buttonStyle,
-              background: currentTool === 'move' ? '#2563eb' : '#f3f4f6',
-              color: currentTool === 'move' ? 'white' : '#4b5563',
-            }}
-          >
-            Move
-          </button>
-          <button
-            onClick={() => setTool('rotate')}
-            style={{
-              ...buttonStyle,
-              background: currentTool === 'rotate' ? '#2563eb' : '#f3f4f6',
-              color: currentTool === 'rotate' ? 'white' : '#4b5563',
-            }}
-          >
-            Rotate
-          </button>
-          <button
-            onClick={() => setTool('delete')}
-            style={{
-              ...buttonStyle,
-              background: currentTool === 'delete' ? '#ef4444' : '#f3f4f6',
-              color: currentTool === 'delete' ? 'white' : '#4b5563',
-            }}
-          >
-            Delete
-          </button>
+        <div style={{
+          ...containerStyle,
+          flexDirection: 'column',
+          gap: '8px',
+        }}>
+          <span style={titleStyle}>Tools</span>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={() => setTool('move')}
+              style={{
+                ...buttonStyle,
+                background: currentTool === 'move' ? '#2563eb' : '#f3f4f6',
+                color: currentTool === 'move' ? 'white' : '#4b5563',
+              }}
+            >
+              Move
+            </button>
+            <button
+              onClick={() => setTool('rotate')}
+              style={{
+                ...buttonStyle,
+                background: currentTool === 'rotate' ? '#2563eb' : '#f3f4f6',
+                color: currentTool === 'rotate' ? 'white' : '#4b5563',
+              }}
+            >
+              Rotate
+            </button>
+            <button
+              onClick={() => setTool('delete')}
+              style={{
+                ...buttonStyle,
+                background: currentTool === 'delete' ? '#ef4444' : '#f3f4f6',
+                color: currentTool === 'delete' ? 'white' : '#4b5563',
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </div>
 
         <div style={{ pointerEvents: 'auto' }}>
@@ -151,13 +169,7 @@ export const UI: React.FC = () => {
         minWidth: '60px',
         alignItems: 'center'
       }}>
-        <span style={{ 
-          fontWeight: 700, 
-          fontSize: '11px', 
-          color: '#6b7280',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em'
-        }}>
+        <span style={titleStyle}>
           Color
         </span>
         <input
@@ -169,6 +181,7 @@ export const UI: React.FC = () => {
             height: '40px',
             padding: '0',
             border: 'none',
+            borderRadius: '8px',
             cursor: 'pointer',
             background: 'none',
           }}
@@ -181,33 +194,38 @@ export const UI: React.FC = () => {
         position: 'absolute',
         bottom: '24px',
         right: '24px',
+        flexDirection: 'column',
+        gap: '8px',
       }}>
-        <button
-          onClick={handleSave}
-          style={{
-            ...buttonStyle,
-            background: '#10b981',
-            color: 'white',
-          }}
-        >
-          Save
-        </button>
-        <label
-          style={{
-            ...buttonStyle,
-            background: '#3b82f6',
-            color: 'white',
-            cursor: 'pointer',
-          }}
-        >
-          Load
-          <input
-            type="file"
-            accept=".json"
-            onChange={handleLoad}
-            style={{ display: 'none' }}
-          />
-        </label>
+        <span style={titleStyle}>Project</span>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={handleSave}
+            style={{
+              ...buttonStyle,
+              background: '#10b981',
+              color: 'white',
+            }}
+          >
+            Save
+          </button>
+          <label
+            style={{
+              ...buttonStyle,
+              background: '#3b82f6',
+              color: 'white',
+              cursor: 'pointer',
+            }}
+          >
+            Load
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleLoad}
+              style={{ display: 'none' }}
+            />
+          </label>
+        </div>
       </div>
 
       {/* Bottom Center: Brick Selection */}
@@ -218,22 +236,27 @@ export const UI: React.FC = () => {
         left: '50%',
         transform: 'translateX(-50%)',
         padding: '16px',
+        flexDirection: 'column',
+        gap: '8px',
       }}>
-        {BRICK_TYPES.map((type) => (
-          <button
-            key={type}
-            onClick={() => addBrick(type)}
-            style={{
-              ...buttonStyle,
-              background: '#f3f4f6',
-              color: '#374151',
-              border: '1px solid #e5e7eb',
-              minWidth: '60px',
-            }}
-          >
-            {type}
-          </button>
-        ))}
+        <span style={titleStyle}>Bricks</span>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {BRICK_TYPES.map((type) => (
+            <button
+              key={type}
+              onClick={() => addBrick(type)}
+              style={{
+                ...buttonStyle,
+                background: '#f3f4f6',
+                color: '#374151',
+                border: '1px solid #e5e7eb',
+                minWidth: '60px',
+              }}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
