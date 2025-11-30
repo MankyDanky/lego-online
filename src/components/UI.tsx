@@ -2,7 +2,10 @@ import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { BrickType } from '../store/gameStore';
 
-const BRICK_TYPES: BrickType[] = ['1x1', '1x2', '1x4', '2x2', '2x4'];
+const BRICK_TYPES: BrickType[] = [
+  '1x1', '1x2', '1x3', '1x4', '1x6', '1x8',
+  '2x2', '2x3', '2x4', '2x6', '2x8'
+];
 
 export const UI: React.FC = () => {
   const selectedColor = useGameStore((state) => state.selectedColor);
@@ -240,7 +243,13 @@ export const UI: React.FC = () => {
         gap: '8px',
       }}>
         <span style={titleStyle}>Bricks</span>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          flexWrap: 'wrap', 
+          justifyContent: 'center',
+          maxWidth: '30vw' 
+        }}>
           {BRICK_TYPES.map((type) => (
             <button
               key={type}

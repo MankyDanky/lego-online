@@ -1,14 +1,20 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
 
-export type BrickType = '2x2' | '2x4' | '1x2' | '1x4' | '1x1';
+export type BrickType = '1x1' | '1x2' | '1x3' | '1x4' | '1x6' | '1x8' | '2x2' | '2x3' | '2x4' | '2x6' | '2x8';
 
 export const BRICK_DIMENSIONS: Record<BrickType, { width: number; depth: number }> = {
   '1x1': { width: 1, depth: 1 },
   '1x2': { width: 1, depth: 2 },
+  '1x3': { width: 1, depth: 3 },
   '1x4': { width: 1, depth: 4 },
+  '1x6': { width: 1, depth: 6 },
+  '1x8': { width: 1, depth: 8 },
   '2x2': { width: 2, depth: 2 },
+  '2x3': { width: 2, depth: 3 },
   '2x4': { width: 2, depth: 4 },
+  '2x6': { width: 2, depth: 6 },
+  '2x8': { width: 2, depth: 8 },
 };
 
 export const BRICK_HEIGHT = 1.2;
