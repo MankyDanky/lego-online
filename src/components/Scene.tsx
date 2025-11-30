@@ -72,7 +72,33 @@ const SceneContent: React.FC = () => {
   };
 
   const handleTransformEnd = (id: string, position: [number, number, number], rotation: [number, number, number]) => {
-    updateBrick(id, { position, rotation });
+    const brick = bricks.find(b => b.id === id);
+    if (!brick) return;
+
+    const { width, depth } = BRICK_DIMENSIONS[brick.type];
+    
+    // Determine effective dimensions based on rotation
+    const rotY = Math.round((rotation[1] / (Math.PI / 2))) % 2;
+    const isRotated = Math.abs(rotY) === 1;
+    
+    const effectiveWidth = isRotated ? depth : width;
+    const effectiveDepth = isRotated ? width : depth;
+
+    // Snap X and Z based on dimensions
+    // If dimension is Odd, center should be at X.5
+    // If dimension is Even, center should be at X.0
+    const snapX = effectiveWidth % 2 !== 0 
+      ? Math.round(position[0] - 0.5) + 0.5 
+      : Math.round(position[0]);
+
+    const snapZ = effectiveDepth % 2 !== 0 
+      ? Math.round(position[2] - 0.5) + 0.5 
+      : Math.round(position[2]);
+
+    // Recalculate Y based on new position and rotation
+    const newY = getStackHeight(id, brick.type, rotation, snapX, snapZ);
+
+    updateBrick(id, { position: [snapX, newY, snapZ], rotation });
   };
 
   return (

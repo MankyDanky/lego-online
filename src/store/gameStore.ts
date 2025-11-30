@@ -47,13 +47,18 @@ export const useGameStore = create<GameState>((set) => ({
   addBrick: (type) =>
     set((state) => {
       const newId = uuidv4();
+      const { width, depth } = BRICK_DIMENSIONS[type];
+      // Snap logic: Odd dimensions -> 0.5, Even dimensions -> 0
+      const x = width % 2 !== 0 ? 0.5 : 0;
+      const z = depth % 2 !== 0 ? 0.5 : 0;
+      
       return {
         bricks: [
           ...state.bricks,
           { 
             id: newId, 
             type, 
-            position: [0, 0.6, 0], // Default spawn height
+            position: [x, 0.6, z], // Default spawn height
             rotation: [0, 0, 0],
             color: state.selectedColor 
           },
