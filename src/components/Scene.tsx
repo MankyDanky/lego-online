@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Canvas, type ThreeEvent } from '@react-three/fiber';
-import { OrbitControls, Sky, Stars } from '@react-three/drei';
+import { OrbitControls, Sky } from '@react-three/drei';
 import { useGameStore, BRICK_DIMENSIONS, BRICK_HEIGHT, type BrickType } from '../store/gameStore';
 import { Brick } from './Brick';
 import { Ground } from './Ground';
@@ -106,7 +106,6 @@ const SceneContent: React.FC = () => {
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
       <Sky sunPosition={[100, 20, 100]} />
-      <Stars />
       
       <Ground onClick={handleGroundClick} />
       
@@ -132,7 +131,7 @@ const SceneContent: React.FC = () => {
       ))}
       
       <gridHelper args={[100, 100]} position={[0, 0.01, 0]} />
-      <OrbitControls ref={orbitRef} makeDefault />
+      <OrbitControls ref={orbitRef} makeDefault maxDistance={50} />
     </>
   );
 };

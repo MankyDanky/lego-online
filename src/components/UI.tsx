@@ -2,16 +2,6 @@ import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { BrickType } from '../store/gameStore';
 
-const COLORS = [
-  '#cc0000', // Red
-  '#0055bf', // Blue
-  '#237841', // Green
-  '#f2cd37', // Yellow
-  '#ffffff', // White
-  '#05131d', // Black
-  '#9ba19d', // Light Grey
-];
-
 const BRICK_TYPES: BrickType[] = ['1x1', '1x2', '1x4', '2x2', '2x4'];
 
 export const UI: React.FC = () => {
@@ -99,82 +89,68 @@ export const UI: React.FC = () => {
         </button>
       </div>
 
-      {/* Bottom Bar: Brick Selection & Colors */}
+      {/* Bottom Left: Color Picker */}
       <div style={{
         pointerEvents: 'auto',
+        position: 'absolute',
+        bottom: '20px',
+        left: '20px',
+        background: 'rgba(255, 255, 255, 0.9)',
+        padding: '10px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '5px'
+      }}>
+        <span style={{ fontWeight: 'bold', fontSize: '12px', color: '#333' }}>Color</span>
+        <input
+          type="color"
+          value={selectedColor}
+          onChange={(e) => setColor(e.target.value)}
+          style={{
+            width: '40px',
+            height: '40px',
+            padding: '0',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            background: 'none'
+          }}
+        />
+      </div>
+
+      {/* Bottom Center: Brick Selection */}
+      <div style={{
+        pointerEvents: 'auto',
+        position: 'absolute',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
         background: 'rgba(255, 255, 255, 0.9)',
         padding: '15px',
         borderRadius: '10px',
         display: 'flex',
-        flexDirection: 'column',
-        gap: '15px',
-        boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
-        alignSelf: 'center',
-        maxWidth: '800px'
+        gap: '10px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
       }}>
-        {/* Brick Types */}
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {BRICK_TYPES.map((type) => (
-            <button
-              key={type}
-              onClick={() => addBrick(type)}
-              style={{
-                padding: '10px 20px',
-                background: '#eee',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                minWidth: '60px'
-              }}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
-
-        <div style={{ height: '1px', background: '#ddd' }} />
-
-        {/* Colors */}
-        <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontWeight: 'bold', color: '#333' }}>Color:</span>
-            <input
-              type="color"
-              value={selectedColor}
-              onChange={(e) => setColor(e.target.value)}
-              style={{
-                width: '50px',
-                height: '40px',
-                padding: '0',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                background: 'none'
-              }}
-            />
-          </div>
-          
-          {/* Quick Colors */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {COLORS.map((color) => (
-              <div
-                key={color}
-                onClick={() => setColor(color)}
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  backgroundColor: color,
-                  borderRadius: '50%',
-                  cursor: 'pointer',
-                  border: selectedColor === color ? '3px solid #333' : '2px solid transparent',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                  transition: 'transform 0.1s'
-                }}
-              />
-            ))}
-          </div>
-        </div>
+        {BRICK_TYPES.map((type) => (
+          <button
+            key={type}
+            onClick={() => addBrick(type)}
+            style={{
+              padding: '10px 20px',
+              background: '#eee',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              minWidth: '60px'
+            }}
+          >
+            {type}
+          </button>
+        ))}
       </div>
     </div>
   );
