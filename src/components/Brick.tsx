@@ -113,7 +113,7 @@ export const Brick: React.FC<BrickProps> = ({
             }
           }}
           onObjectChange={() => {
-            if (tool === 'move' && group) {
+            if (group) {
               const { width, depth } = BRICK_DIMENSIONS[type];
               const rotation = [group.rotation.x, group.rotation.y, group.rotation.z];
               
